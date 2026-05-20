@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://yafoconsultora.com/sitemap.xml
+Host: https://yafoconsultora.com

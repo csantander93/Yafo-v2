@@ -1,0 +1,636 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Theme variables from products-section for consistency */
+  --contact-main-bg: #050f21;
+  --contact-primary-blue: #007BFF;
+  --contact-innovative-blue: #00AEEf;
+  --contact-secondary-text: #B0C4DE;
+  --contact-text-dark: #111827;
+  --contact-text-secondary: #4b5563;
+  --contact-cyber-glow: 0 0 9px rgba(0, 123, 255, 0.7);
+  --contact-cyber-glow-intense: 0 0 18px rgba(0, 174, 239, 0.9);
+  --contact-metal-gradient: linear-gradient(135deg, var(--contact-primary-blue) 0%, var(--contact-innovative-blue) 50%, var(--contact-primary-blue) 100%);
+  
+  /* Form-specific variables */
+  --contact-form-bg: rgba(255, 255, 255, 0.95);
+  --contact-form-shadow: 0 10px 25px rgba(0, 86, 179, 0.15);
+  --contact-input-focus-glow: 0 0 0 2px rgba(0, 136, 204, 0.3);
+  --contact-button-hover-glow: 0 0 10px rgba(0, 136, 204, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(4.5deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.09; transform: scale(0.9); }
+  50% { opacity: 0.27; transform: scale(0.945); }
+}
+
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 36px 36px; }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 rgba(0, 136, 204, 0); }
+  50% { box-shadow: 0 0 10px rgba(0, 136, 204, 0.4); }
+  100% { box-shadow: 0 0 0 rgba(0, 136, 204, 0); }
+}
+
+/* Base styles for contact section */
+.contact-section {
+  position: relative;
+  padding: 5rem 0;
+  background: var(--contact-main-bg);
+  overflow: hidden;
+  isolation: isolate;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Background container */
+.contact-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Gradient effect similar to products-section */
+.contact-gradient {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, rgba(0, 174, 239, 0.09), transparent 70%);
+  animation: pulse 13.5s ease-in-out infinite alternate;
+  opacity: 0.45;
+}
+
+/* Particle effects */
+.contact-particle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(54px);
+  animation: float 13.5s ease-in-out infinite;
+  opacity: 0.27;
+  mix-blend-mode: screen;
+}
+
+.contact-particle-1 {
+  width: 180px;
+  height: 180px;
+  top: 9%;
+  left: 9%;
+  background: var(--contact-primary-blue);
+  animation-delay: 0s;
+  animation-duration: 16.2s;
+}
+
+.contact-particle-2 {
+  width: 270px;
+  height: 270px;
+  bottom: 4.5%;
+  right: 4.5%;
+  background: var(--contact-innovative-blue);
+  animation-delay: 2.7s;
+  animation-duration: 19.8s;
+}
+
+.contact-particle-3 {
+  width: 135px;
+  height: 135px;
+  top: 45%;
+  left: 63%;
+  background: var(--contact-primary-blue);
+  animation-delay: 5.4s;
+  animation-duration: 13.5s;
+}
+
+.contact-particle-4 {
+  width: 225px;
+  height: 225px;
+  top: 63%;
+  left: 18%;
+  background: var(--contact-innovative-blue);
+  animation-delay: 8.1s;
+  animation-duration: 18s;
+}
+
+/* Main container */
+.contact-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Header */
+.contact-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+
+.contact-title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--contact-secondary-text);
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.contact-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--contact-metal-gradient);
+  border-radius: 2px;
+  box-shadow: var(--contact-cyber-glow);
+}
+
+.contact-subtitle {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--contact-secondary-text);
+}
+
+/* Form container */
+.contact-row {
+  display: flex;
+  background: var(--contact-form-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--contact-form-shadow);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.contact-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 86, 179, 0.2);
+}
+
+/* Form section */
+.form-container {
+  flex: 1;
+  width: 100%;
+  padding: 2.5rem;
+}
+
+/* Form styles */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .floating-input {
+  flex: 1;
+}
+
+.floating-input {
+  position: relative;
+}
+
+.floating-input input,
+.floating-input textarea {
+  width: 100%;
+  padding: 0.9rem 1rem 0.6rem;
+  border: 1px solid var(--contact-border-light);
+  font-size: 0.9rem;
+  color: var(--contact-text-dark);
+  background-color: white;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.floating-input input:focus,
+.floating-input textarea:focus {
+  outline: none;
+  border-color: var(--contact-innovative-blue);
+  box-shadow: var(--contact-input-focus-glow);
+}
+
+.floating-input.textarea-input textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+.floating-input label {
+  position: absolute;
+  top: 0.9rem;
+  left: 1rem;
+  color: var(--contact-text-secondary);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  padding: 0 0.2rem;
+}
+
+.floating-input input:focus + label,
+.floating-input input:not(:placeholder-shown) + label,
+.floating-input textarea:focus + label,
+.floating-input textarea:not(:placeholder-shown) + label {
+  top: -0.5rem;
+  left: 0.7rem;
+  font-size: 0.65rem;
+  color: var(--contact-innovative-blue);
+  font-weight: 500;
+}
+
+/* Submit button */
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(90deg, var(--contact-primary-blue) 0%, var(--contact-innovative-blue) 100%);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.3rem;
+  box-shadow: 0 3px 5px rgba(0, 86, 179, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
+}
+
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+}
+
+.form-submit:hover::before {
+  left: 100%;
+}
+
+.form-submit.submitting {
+  pointer-events: none;
+  background: var(--contact-text-secondary);
+}
+
+.submit-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.4rem;
+  transition: transform 0.3s ease;
+}
+
+.form-submit:hover .submit-icon {
+  transform: translateX(2px);
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success message */
+.success-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.8rem;
+  background: rgba(230, 240, 255, 0.7);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 86, 179, 0.2);
+  animation: pulseGlow 3s infinite;
+}
+
+.success-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--contact-innovative-blue);
+}
+
+.success-message h4 {
+  font-size: 1.25rem;
+  color: var(--contact-text-dark);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.success-message p {
+  color: var(--contact-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* reCAPTCHA Styles */
+.recaptcha-container {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* Ajustes responsivos para reCAPTCHA */
+@media (max-width: 480px) {
+  .recaptcha-container {
+    transform: scale(0.85);
+    transform-origin: left top;
+    margin: 0.8rem 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .recaptcha-container {
+    transform: scale(0.75);
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .contact-section {
+    padding: 7.2rem 0;
+  }
+  
+  .contact-title {
+    font-size: 1.8rem;
+  }
+  
+  .contact-subtitle {
+    font-size: 0.9rem;
+  }
+}
+/* Añade esto al final de tu ContactForm.css, en la sección de media queries */
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 3rem 1rem; /* Reducimos el padding superior/inferior */
+  }
+
+  .contact-container {
+    padding: 0 1rem; /* Menos padding lateral */
+  }
+
+  .contact-row {
+    margin: 0 auto;
+    width: 90%; /* Hacemos el formulario un poco más estrecho */
+    max-width: 400px; /* Limitamos el ancho máximo */
+  }
+
+  .form-container {
+    padding: 1.5rem; /* Reducimos el padding interno */
+  }
+
+  .contact-title {
+    font-size: 1.8rem; /* Título un poco más pequeño */
+    margin-bottom: 0.8rem;
+  }
+
+  .contact-subtitle {
+    font-size: 0.9rem; /* Subtítulo más pequeño */
+    margin-bottom: 1.5rem;
+  }
+
+  .floating-input input,
+  .floating-input textarea {
+    padding: 0.7rem 0.9rem 0.4rem; /* Padding más ajustado */
+    font-size: 0.85rem; /* Texto un poco más pequeño */
+  }
+
+  .floating-input label {
+    font-size: 0.85rem; /* Labels más pequeños */
+    top: 0.7rem;
+  }
+
+  .floating-input input:focus + label,
+  .floating-input input:not(:placeholder-shown) + label,
+  .floating-input textarea:focus + label,
+  .floating-input textarea:not(:placeholder-shown) + label {
+    top: -0.4rem;
+    font-size: 0.6rem;
+  }
+
+  .form-submit {
+    padding: 0.7rem 1.2rem; /* Botón más compacto */
+    font-size: 0.85rem;
+  }
+
+  /* Ajustamos las partículas para móviles */
+  .contact-particle-1,
+  .contact-particle-2,
+  .contact-particle-3,
+  .contact-particle-4 {
+    filter: blur(30px); /* Menos blur para que ocupen menos espacio */
+  }
+
+  .contact-particle-1 {
+    width: 120px;
+    height: 120px;
+    top: 5%;
+    left: 5%;
+  }
+
+  .contact-particle-2 {
+    width: 180px;
+    height: 180px;
+    bottom: 3%;
+    right: 3%;
+  }
+
+  .contact-particle-3 {
+    width: 90px;
+    height: 90px;
+    top: 40%;
+    left: 60%;
+  }
+
+  .contact-particle-4 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    left: 15%;
+  }
+}
+
+@media (max-width: 576px) {
+  .contact-section {
+    padding: 5.4rem 0;
+  }
+  
+  .contact-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-container {
+    padding: 1.5rem;
+  }
+  
+  .floating-input input,
+  .floating-input textarea {
+    padding: 0.8rem 0.9rem 0.5rem;
+  }
+}
+
+
+/* Añade esto al final de tu ContactForm.css */
+
+@media (max-width: 480px) {
+  /* Ajustes generales para móviles pequeños */
+  .contact-section {
+    padding: 2rem 0.5rem;
+  }
+  
+  .contact-row {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .form-container {
+    padding: 1.2rem;
+  }
+  
+  /* Ajustes específicos para los inputs */
+  .floating-input input,
+  .floating-input textarea {
+    padding: 0.8rem 0.8rem 0.4rem;
+    font-size: 0.8rem;
+    min-height: 42px;
+  }
+  
+  .floating-input label {
+    font-size: 0.8rem;
+    top: 0.8rem;
+    left: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
+  }
+  
+  .floating-input input:focus + label,
+  .floating-input input:not(:placeholder-shown) + label,
+  .floating-input textarea:focus + label,
+  .floating-input textarea:not(:placeholder-shown) + label {
+    top: -0.5rem;
+    left: 0.6rem;
+    font-size: 0.6rem;
+    max-width: 95%;
+  }
+  
+  /* Ajuste especial para el campo de nombre */
+  .floating-input#name-input label {
+    font-size: 0.75rem; /* Un poco más pequeño para caber */
+  }
+  
+  /* Hacer que los campos en fila se apilen verticalmente */
+  .form-row {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  /* Ajustar el botón de enviar */
+  .form-submit {
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Ajustar el título y subtítulo */
+  .contact-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-subtitle {
+    font-size: 0.8rem;
+    padding: 0 0.5rem;
+  }
+  
+  /* Reducir el tamaño de las partículas de fondo */
+  .contact-particle {
+    filter: blur(20px);
+  }
+  
+  .contact-particle-1 {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .contact-particle-2 {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .contact-particle-3 {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .contact-particle-4 {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Añadir para pantallas muy pequeñas (menos de 360px) */
+@media (max-width: 360px) {
+  .floating-input label {
+    font-size: 0.7rem;
+  }
+  
+  .floating-input input:focus + label,
+  .floating-input input:not(:placeholder-shown) + label,
+  .floating-input textarea:focus + label,
+  .floating-input textarea:not(:placeholder-shown) + label {
+    font-size: 0.55rem;
+  }
+  
+  .contact-title {
+    font-size: 1.3rem;
+  }
+}
