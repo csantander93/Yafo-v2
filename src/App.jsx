@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 import Seo       from './components/seo/Seo';
 import { ScrollProgress, BackgroundLayer, GlowCards } from './components/effects/Effects';
-import Tweaks    from './components/tweaks/Tweaks';
 import Header    from './components/header/Header';
 import Hero      from './components/intro/Intro';
 import Features  from './components/features/Features';
@@ -33,7 +32,6 @@ function App() {
       <ScrollProgress />
       <BackgroundLayer />
       <GlowCards />
-      <Tweaks />
       <Header />
       <main>
         <Hero />

@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import logo from '../../assets/Logo-Yafo-JPG_grises-150dpi.webp';
 import { smoothScrollTo } from '../../hooks/useReveal';
+import PrivacyModal from '../privacy/PrivacyModal';
 
 const NAV = [
   { label: 'Inicio',      href: '#inicio'     },
@@ -19,7 +21,11 @@ const PLATFORM = [
 ];
 
 export default function Footer() {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+
   return (
+    <>
+    {privacyOpen && <PrivacyModal onClose={() => setPrivacyOpen(false)} />}
     <footer className="site-footer" role="contentinfo">
       <div className="wrap">
         <div className="footer-grid">
@@ -94,8 +100,28 @@ export default function Footer() {
           <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--fg-4)' }}>
             Buenos Aires, Argentina
           </p>
+          <button
+            onClick={() => setPrivacyOpen(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              margin: 0,
+              cursor: 'pointer',
+              fontSize: '0.8125rem',
+              color: 'var(--fg-4)',
+              transition: 'color 0.2s',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.08em',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--accent)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--fg-4)'}
+          >
+            Aviso de Privacidad
+          </button>
         </div>
       </div>
     </footer>
+    </>
   );
 }
