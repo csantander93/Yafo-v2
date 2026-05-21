@@ -1,225 +1,182 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './ModulosPopup.css';
 
-const ModulosPopup = ({
-  initialCategory,
-  selectedModule,
-  onModuleSelect,
-  onClose,
-  onBack,
-  modulesData,
-  categoryMapping
-}) => {
-  const [animate, setAnimate] = useState(false);
-  const [isPanelAnimated, setIsPanelAnimated] = useState(false);
-  const descriptionPanelRef = useRef(null);
-  // Marca si el panel de detalle ya se abrió al menos una vez en esta sesión del popup
-  const panelEverOpenedRef = useRef(false);
+const Arrow = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+);
 
-  // Schema Markup para módulos (SEO)
+const shortCategory = (cat) => (cat.includes('(') ? cat.split('(')[0].trim() : cat);
+
+const ModulosPopup = ({ tabLabel, categoryKey, modulesData, lang = 'es', onClose }) => {
+  const [selected,   setSelected]   = useState(null);
+  const [panelOpen,  setPanelOpen]  = useState(false);
+  const [mobileView, setMobileView] = useState('list');
+  const panelEverOpened = useRef(false);
+  const detailRef       = useRef(null);
+
+  const modules     = modulesData[categoryKey] || {};
+  const moduleNames = Object.keys(modules);
+
+  // Bloquear scroll del body
   useEffect(() => {
-    if (selectedModule && modulesData[initialCategory]?.[selectedModule]) {
-      const moduleSchema = {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": selectedModule,
-        "description": modulesData[initialCategory][selectedModule].description,
-        "applicationCategory": "BusinessApplication",
-        "featureList": modulesData[initialCategory][selectedModule].features,
-        "operatingSystem": "Web-based",
-        "offers": {
-          "@type": "Offer",
-          "category": "SoftwareAsAService"
-        }
-      };
-
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.text = JSON.stringify(moduleSchema);
-      document.head.appendChild(script);
-
-      return () => {
-        document.head.removeChild(script);
-      };
-    }
-  }, [selectedModule, initialCategory, modulesData]);
-
-  // Resto del código original sin cambios...
-  const getShortCategoryName = (category) => {
-    return category.includes('(') ? category.split('(')[0].trim() : category;
-  };
-
-  useEffect(() => {
-    if (descriptionPanelRef.current) {
-      descriptionPanelRef.current.scrollTop = 0;
-    }
-  }, [selectedModule]);
-
-  useEffect(() => {
-    setAnimate(true);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow    = 'hidden';
+    document.body.style.touchAction = 'none';
+    return () => {
+      document.body.style.overflow    = prev;
+      document.body.style.touchAction = '';
+    };
   }, []);
 
+  // Cerrar con Escape
   useEffect(() => {
-    if (selectedModule) {
-      if (!panelEverOpenedRef.current) {
-        // Primera vez: animar el deslizamiento del panel
-        panelEverOpenedRef.current = true;
-        const id = setTimeout(() => setIsPanelAnimated(true), 40);
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  // Resetear scroll del panel de detalle al cambiar módulo
+  useEffect(() => {
+    if (detailRef.current) detailRef.current.scrollTop = 0;
+  }, [selected]);
+
+  // Animar apertura del panel derecho la primera vez
+  useEffect(() => {
+    if (selected) {
+      if (!panelEverOpened.current) {
+        panelEverOpened.current = true;
+        const id = setTimeout(() => setPanelOpen(true), 40);
         return () => clearTimeout(id);
       }
-      // Selecciones posteriores: el panel ya está abierto, solo cambia el contenido
     } else {
-      setIsPanelAnimated(false);
-      panelEverOpenedRef.current = false;
+      setPanelOpen(false);
+      panelEverOpened.current = false;
     }
-  }, [selectedModule]);
+  }, [selected]);
 
-  useEffect(() => {
-    const handleWheel = (e) => {
-      if (!descriptionPanelRef.current) return;
-      
-      const { scrollTop, scrollHeight, clientHeight } = descriptionPanelRef.current;
-      const isAtTop = scrollTop === 0;
-      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 1;
-      
-      if ((e.deltaY < 0 && !isAtTop) || (e.deltaY > 0 && !isAtBottom)) {
-        e.stopPropagation();
-      }
-    };
-
-    const panel = descriptionPanelRef.current;
-    if (panel) {
-      panel.addEventListener('wheel', handleWheel, { passive: false });
-    }
-
-    return () => {
-      if (panel) {
-        panel.removeEventListener('wheel', handleWheel);
-      }
-    };
-  }, [selectedModule]);
-
-  const handleModuleClick = (moduleName) => {
-    onModuleSelect(moduleName);
+  const handleModuleClick = (name) => {
+    setSelected(name);
+    setMobileView('detail');
   };
 
-  if (!modulesData[initialCategory]) {
-    console.error(`La categoría "${initialCategory}" no existe en modulesData`);
-    return null;
-  }
+  const detail    = selected ? modules[selected] : null;
+  const bodyClass = [
+    'mp-body',
+    panelOpen           ? 'panel-open' : '',
+    mobileView === 'detail' ? 'mob-detail' : '',
+  ].filter(Boolean).join(' ');
 
   return (
-    <div className="popup-modulos-popup-overlay">
-      <div className={`popup-modulos-popup-container ${animate ? 'animate-in' : ''}`}>
-        <div className="popup-header">
-          <div className="breadcrumbs">
-            <span className="breadcrumb" itemProp="applicationCategory">
-              {categoryMapping[initialCategory] || initialCategory}
-            </span>
-            {selectedModule && (
+    <>
+      <div className="mp-overlay" onClick={onClose} aria-hidden="true" />
+      <div className="mp-container" role="dialog" aria-modal="true" aria-label={tabLabel}>
+
+        {/* ── Header ── */}
+        <div className="mp-header">
+          <div className="mp-crumbs">
+            <span>{lang === 'es' ? 'Plataforma' : 'Platform'}</span>
+            <span className="mp-sep">·</span>
+            <strong>{tabLabel}</strong>
+            {selected && (
               <>
-                <span className="breadcrumb-divider">/</span>
-                <span className="breadcrumb active" itemProp="name">{selectedModule}</span>
+                <span className="mp-sep">/</span>
+                <span className="mp-crumb-mod">{selected}</span>
               </>
             )}
           </div>
-          <button 
-            className="close-button" 
-            onClick={onClose}
-            aria-label="Cerrar popup"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round"/>
+          <button className="mp-close" onClick={onClose} aria-label={lang === 'es' ? 'Cerrar' : 'Close'}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <div className={`popup-modulos-popup-content ${isPanelAnimated ? 'panel-animated' : ''}`}>
-          <div className="popup-modules-panel">
-            <div className="panel-header popup-modulos-header-container">
-              <h3>Módulos</h3>
-              <span className="popup-modulos-count">
-                {Object.keys(modulesData[initialCategory]).length} módulos
-              </span>
-              <p>Seleccione un módulo para ver detalles</p>
+        {/* ── Body ── */}
+        <div className={bodyClass}>
+
+          {/* Panel izquierdo: lista de módulos */}
+          <div className="mp-list">
+            <div className="mp-list-head">
+              <span className="mp-list-title">{lang === 'es' ? 'Módulos' : 'Modules'}</span>
+              <span className="mp-list-count">{moduleNames.length}</span>
             </div>
-            
-            <div className="popup-modules-list">
-              {Object.keys(modulesData[initialCategory]).map((moduleName, index) => (
-                <div
-                  key={moduleName}
-                  className={`popup-module-item ${selectedModule === moduleName ? 'selected' : ''}`}
-                  onClick={() => handleModuleClick(moduleName)}
-                  style={{ '--delay': `${index * 0.05 + 0.1}s` }}
-                  itemScope
-                  itemType="https://schema.org/SoftwareApplication"
+            <div className="mp-list-items">
+              {moduleNames.map((name, i) => (
+                <button
+                  key={name}
+                  className={`mp-item${selected === name ? ' active' : ''}`}
+                  style={{ '--delay': `${i * 0.04 + 0.06}s` }}
+                  onClick={() => handleModuleClick(name)}
                 >
-                  <div className="popup-module-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <path d="M5 12h14" strokeWidth="2" strokeLinecap="round" />
-                      <path d="M12 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <h4 itemProp="name">{moduleName}</h4>
-                </div>
+                  <span className="mp-item-arrow"><Arrow /></span>
+                  <span className="mp-item-name">{name}</span>
+                </button>
               ))}
             </div>
           </div>
 
-          <div 
-            className="popup-module-detail-panel" 
-            ref={descriptionPanelRef}
-            itemScope
-            itemType="https://schema.org/SoftwareApplication"
-          >
-            {selectedModule && (
+          {/* Panel derecho: detalle del módulo */}
+          <div className="mp-detail" ref={detailRef}>
+            {detail ? (
               <>
-                <div className="popup-module-detail-header">
-                  <div className="popup-mobile-back-button-container">
-                    <button 
-                      className="popup-mobile-back-button"
-                      onClick={onBack}
-                      aria-label="Volver a módulos"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M15 18l-6-6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      Volver
-                    </button>
-                  </div>
-                  <h3 title={selectedModule} itemProp="name">{selectedModule}</h3>
-                  <div className="popup-module-category-badge" itemProp="applicationCategory">
-                    {getShortCategoryName(initialCategory)}
-                  </div>
+                <button
+                  className="mp-back"
+                  onClick={() => setMobileView('list')}
+                  aria-label={lang === 'es' ? 'Volver a módulos' : 'Back to modules'}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 12H5M12 5l-7 7 7 7" />
+                  </svg>
+                  {lang === 'es' ? 'Módulos' : 'Modules'}
+                </button>
+
+                <div className="mp-detail-head">
+                  <div className="mp-cat">{shortCategory(categoryKey)}</div>
+                  <h3>{selected}</h3>
                 </div>
-                
-                <div className="popup-module-detail-content">
-                  <p className="popup-module-description" itemProp="description">
-                    {modulesData[initialCategory][selectedModule].description}
-                  </p>
-                  
-                  {modulesData[initialCategory][selectedModule].features && (
-                    <div className="popup-module-features" itemProp="featureList">
-                      <h4>Características principales:</h4>
-                      <ul>
-                        {modulesData[initialCategory][selectedModule].features.map((feature, i) => (
-                          <li key={i} itemProp="feature">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                              <path d="M20 6L9 17l-5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
+
+                {detail.description && (
+                  <p className="mp-desc">{detail.description}</p>
+                )}
+
+                {detail.features?.length > 0 && (
+                  <>
+                    <div className="mp-feat-title">
+                      {lang === 'es' ? 'Funcionalidades principales' : 'Key features'}
                     </div>
-                  )}
-                </div>
+                    <ul className="mp-feat-list">
+                      {detail.features.map((f, i) => (
+                        <li key={i}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12.5l4.5 4.5L19 7" />
+                          </svg>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </>
+            ) : (
+              <div className="mp-empty">
+                <div className="mp-empty-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                  </svg>
+                </div>
+                <p>{lang === 'es' ? 'Seleccioná un módulo para ver los detalles.' : 'Select a module to view details.'}</p>
+              </div>
             )}
           </div>
+
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -26,9 +26,8 @@ const tabMapping = {
 };
 
 const Solutions = () => {
-  const [showPopup,        setShowPopup]        = useState(false);
-  const [selectedModule,   setSelectedModule]   = useState(null);
-  const [currentPopupTab,  setCurrentPopupTab]  = useState(null);
+  const [showPopup,       setShowPopup]       = useState(false);
+  const [currentPopupTab, setCurrentPopupTab] = useState(null);
 
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
@@ -66,7 +65,6 @@ const Solutions = () => {
 
   const handleTabClick = (tab) => {
     setCurrentPopupTab(tabMapping[tab] || tab);
-    setSelectedModule(null);
     setShowPopup(true);
   };
 
@@ -185,13 +183,11 @@ const Solutions = () => {
       {/* Popup de módulos — lógica sin cambios */}
       {showPopup && currentPopupTab && (
         <ModulosPopup
-          initialCategory={currentPopupTab}
-          selectedModule={selectedModule}
-          onModuleSelect={setSelectedModule}
-          onClose={() => { setShowPopup(false); setSelectedModule(null); setCurrentPopupTab(null); }}
-          onBack={() => setSelectedModule(null)}
+          tabLabel={currentPopupTab}
+          categoryKey={currentPopupTab}
           modulesData={modulesData}
-          categoryMapping={tabMapping}
+          lang="es"
+          onClose={() => { setShowPopup(false); setCurrentPopupTab(null); }}
         />
       )}
     </section>
