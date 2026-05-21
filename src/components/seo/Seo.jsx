@@ -56,7 +56,7 @@ const Seo = ({
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer service",
-            "email": "contacto@yafoconsultora.com"
+            "email": "azariel.yomal@yafoconsultora.com"
           }
         })}
       </script>

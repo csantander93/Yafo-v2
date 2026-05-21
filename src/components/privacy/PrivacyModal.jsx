@@ -73,8 +73,8 @@ export default function PrivacyModal({ onClose }) {
           <p>
             Los titulares de los datos podrán solicitar acceso, rectificación, actualización o
             eliminación de su información escribiendo a:{' '}
-            <a href="mailto:contacto@yafoconsultora.com" className="privacy-email-link">
-              contacto@yafoconsultora.com
+            <a href="mailto:azariel.yomal@yafoconsultora.com" className="privacy-email-link">
+              azariel.yomal@yafoconsultora.com
             </a>
           </p>
 
