@@ -205,19 +205,23 @@ const Clients = () => {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-7xl mx-auto px-6 lg:px-8 text-center mb-14"
       >
-        <span className="text-xs font-display font-bold text-blue-700 uppercase tracking-widest">
+        <span className="eyebrow" style={{ justifyContent: 'center' }}>
           Casos de éxito
         </span>
         <h2
           id="clients-heading"
-          className="font-display font-bold text-slate-900 mt-3 leading-tight"
-          style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}
+          className="display bold"
+          style={{
+            fontSize: 'clamp(28px, 3.8vw, 52px)',
+            marginTop: 18,
+            color: 'var(--fg)',
+            letterSpacing: '-0.03em',
+          }}
         >
-          Confían en nosotros
+          NUESTROS CLIENTES
         </h2>
-        <p className="text-slate-500 text-lg mt-4 max-w-xl mx-auto">
-          Líderes del sistema financiero y empresas de toda Latinoamérica gestionan
-          sus riesgos con Aleph Manager.
+        <p style={{ fontSize: 'clamp(15px, 1.3vw, 18px)', color: 'var(--fg-2)', marginTop: 14, maxWidth: '54ch', marginInline: 'auto', lineHeight: 1.5 }}>
+          Empresas que confían en nuestros servicios
         </p>
 
         {/* Stats */}

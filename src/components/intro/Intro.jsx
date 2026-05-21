@@ -43,14 +43,13 @@ export default function Hero() {
         <div className="hero-content">
 
           <h1 className="hero-title reveal" ref={titleRef}>
-            Software crítico<br />
-            para el sistema{' '}
-            <span className="grad-text">financiero</span>.
+            Protección Avanzada<br />
+            para tus Activos{' '}
+            <span className="grad-text">Digitales</span>.
           </h1>
 
           <p className="hero-sub reveal">
-            Aleph Manager es la plataforma de gestión de riesgo, compliance y continuidad
-            operativa sobre la que más de 50 entidades reguladas ejecutan sus procesos críticos.
+            Soluciones proactivas de identidad y prevención de ciberamenazas
           </p>
 
           <form className="hero-form reveal" onSubmit={onSubmit}>
@@ -62,7 +61,7 @@ export default function Hero() {
               aria-label="Email corporativo"
             />
             <button type="submit" className="btn btn-primary">
-              Consultenos
+              Conoce Nuestros Servicios
               <svg className="arr" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <path d="M2 7h10m-4-4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

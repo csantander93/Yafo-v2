@@ -35,11 +35,11 @@ function App() {
       <Header />
       <main>
         <Hero />
+        <About />
         <Features />
         <Services />
         <Solutions />
         <Stats />
-        <About />
         <Clients />
         <Contact />
       </main>

@@ -129,7 +129,7 @@ export function smoothScrollTo(target) {
   if (!el) return;
   const headerH = (document.querySelector('.site-header') || {}).offsetHeight || 0;
   const start = window.scrollY;
-  const end = el.getBoundingClientRect().top + window.scrollY - headerH - 16;
+  const end = el.getBoundingClientRect().top + window.scrollY - headerH;
   const dist = end - start;
   const duration = Math.min(1400, Math.max(600, Math.abs(dist) * 0.7));
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);

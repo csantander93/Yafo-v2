@@ -50,12 +50,10 @@ export default function Contact() {
               <span className="eyebrow">Contacto</span>
             </div>
             <h2 className="display display-lg bold reveal">
-              Contacte a<br />
-              nuestro <span className="grad-text">equipo</span>.
+              <span className="grad-text">CONTACTO</span>
             </h2>
             <p className="lead reveal" style={{ marginTop: 20, marginBottom: 40 }}>
-              Cuéntenos sobre su organización y evaluaremos la mejor solución
-              para sus procesos de riesgo, compliance y control operativo.
+              Completa el formulario y nos pondremos en contacto contigo
             </p>
 
             <div className="contact-info reveal">
@@ -104,7 +102,7 @@ export default function Contact() {
                     </svg>
                   </div>
                   <h4>¡Mensaje enviado!</h4>
-                  <p>Te contactaremos a la brevedad.</p>
+                  <p>Nos pondremos en contacto contigo pronto.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate>
@@ -155,7 +153,7 @@ export default function Contact() {
                       placeholder=" "
                       required
                     />
-                    <label htmlFor="c-subject">Organización / Asunto</label>
+                    <label htmlFor="c-subject">Asunto</label>
                   </div>
 
                   <div className="form-field">

@@ -5,8 +5,9 @@ import PrivacyModal from '../privacy/PrivacyModal';
 
 const NAV = [
   { label: 'Inicio',      href: '#inicio'     },
+  { label: 'Nosotros',    href: '#nosotros'   },
   { label: 'Servicios',   href: '#servicios'  },
-  { label: 'Plataforma',  href: '#soluciones' },
+  { label: 'Soluciones',  href: '#soluciones' },
   { label: 'Clientes',    href: '#clientes'   },
   { label: 'Contacto',    href: '#contacto'   },
 ];

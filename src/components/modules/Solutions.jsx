@@ -113,7 +113,7 @@ const Solutions = () => {
             className="font-display font-bold text-white mt-3 leading-tight"
             style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}
           >
-            Aleph Manager
+            SOLUCIONES DE SOFTWARE
           </h2>
           <p className="text-slate-400 text-lg mt-4 max-w-2xl mx-auto">
             Solución SaaS modular para la gestión integrada de GRC, PLAFT, continuidad

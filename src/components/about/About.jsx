@@ -2,10 +2,12 @@ import { useEffect, useRef } from 'react';
 import { useReveal, staggerChildren } from '../../hooks/useReveal';
 
 const VALUES = [
-  { num: '01', title: 'A medida',           desc: 'Adaptado a la operatoria y normativa específica de cada entidad.' },
-  { num: '02', title: 'Multidisciplinario', desc: 'Sistemas financieros, ciberseguridad, riesgos y compliance en un mismo equipo.' },
-  { num: '03', title: 'Metodología probada', desc: 'Procesos validados con más de 50 clientes en Argentina y LATAM.' },
-  { num: '04', title: 'Soporte continuo',   desc: 'Acompañamiento en implementación, operación y evolución regulatoria.' },
+  { num: '01', title: 'Enfoque personalizado',    desc: 'Soluciones adaptadas a las necesidades específicas de cada cliente.' },
+  { num: '02', title: 'Tecnología de vanguardia', desc: 'Implementamos herramientas líderes del mercado para máxima eficacia.' },
+  { num: '03', title: 'Equipo multidisciplinario', desc: 'Expertos en seguridad, fintech y gestión de riesgos trabajando en conjunto.' },
+  { num: '04', title: 'Metodología probada',       desc: 'Procesos validados con más de 50 clientes en Latinoamérica.' },
+  { num: '05', title: 'Soporte continuo',          desc: 'Acompañamiento en todas las etapas de implementación y operación.' },
+  { num: '06', title: 'Visión estratégica',        desc: 'Soluciones alineadas con los objetivos de negocio de cada organización.' },
 ];
 
 export default function About() {
@@ -27,8 +29,8 @@ export default function About() {
             </div>
             <h2 className="display display-lg bold reveal">
               Transformamos<br />
-              el <span className="grad-text">compliance</span><br />
-              y la <span className="grad-text">seguridad</span><br />
+              la <span className="grad-text">gestión de compliance</span><br />
+              y <span className="grad-text">seguridad</span><br />
               con tecnología.
             </h2>
           </div>
@@ -36,15 +38,21 @@ export default function About() {
           {/* Right column — copy + values */}
           <div>
             <p className="lead reveal" style={{ marginTop: 18 }}>
-              Somos un equipo de <strong>especialistas en sistemas financieros</strong>,
-              ciberseguridad y continuidad del negocio. Construimos <strong>Aleph Manager</strong>,
-              la plataforma sobre la que más de 50 entidades operan sus procesos críticos
-              de gestión de riesgos, PLAFT, auditoría normativa y reporte regulatorio.
+              Somos un equipo de <strong>expertos en sistemas financieros</strong>,{' '}
+              <strong>ciberseguridad</strong> y <strong>continuidad del negocio</strong>.
+              Más de 50 clientes en <strong>Argentina y Latinoamérica</strong> confían
+              en nuestras <strong>soluciones tecnológicas</strong> para proteger y optimizar
+              sus operaciones críticas.
             </p>
             <p className="lead reveal" style={{ marginTop: 18 }}>
-              Combinamos profundidad técnica con visión estratégica para acompañar a
-              bancos, fintechs, cooperativas, compañías financieras y aseguradoras
-              en entornos altamente regulados.
+              En <strong>YAFO Consultora</strong>, combinamos <strong>experiencia técnica</strong>{' '}
+              y <strong>visión estratégica</strong> para ofrecer soluciones integrales en{' '}
+              gestión de riesgos, ciberseguridad y cumplimiento normativo.
+            </p>
+            <p className="lead reveal" style={{ marginTop: 18 }}>
+              Desde startups hasta grandes empresas, ayudamos a nuestros clientes a navegar
+              entornos complejos con herramientas innovadoras y un compromiso inquebrantable
+              con la calidad.
             </p>
 
             <div className="about-values reveal">

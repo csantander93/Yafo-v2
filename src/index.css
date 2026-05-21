@@ -146,10 +146,10 @@ section {
 }
 .display.bold   { font-weight: 700; }
 .display.heavy  { font-weight: 800; }
-.display-xl  { font-size: clamp(56px, 9vw, 144px); }
-.display-lg  { font-size: clamp(44px, 6.6vw, 96px); }
-.display-md  { font-size: clamp(34px, 4.4vw, 64px); }
-.display-sm  { font-size: clamp(26px, 3.2vw, 40px); }
+.display-xl  { font-size: clamp(48px, 7.5vw, 112px); }
+.display-lg  { font-size: clamp(36px, 5vw, 72px); }
+.display-md  { font-size: clamp(28px, 3.6vw, 52px); }
+.display-sm  { font-size: clamp(22px, 2.8vw, 36px); }
 
 .lead {
   font-size: clamp(17px, 1.4vw, 21px);
@@ -419,7 +419,7 @@ section {
 .hero-title {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: clamp(48px, 8.6vw, 132px);
+  font-size: clamp(42px, 7vw, 100px);
   line-height: 0.94;
   letter-spacing: -0.035em;
   text-wrap: balance;
@@ -591,7 +591,7 @@ section {
 .stat-num {
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(64px, 9vw, 120px);
+  font-size: clamp(52px, 7vw, 92px);
   font-variant-numeric: tabular-nums;
   line-height: 0.96;
   letter-spacing: -0.05em;

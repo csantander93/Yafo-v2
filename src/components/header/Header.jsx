@@ -5,8 +5,9 @@ import logo from '../../assets/Logo-Yafo-JPG_grises-150dpi.webp';
 
 const NAV_ITEMS = [
   { id: 'inicio',     label: 'Inicio'     },
+  { id: 'nosotros',   label: 'Nosotros'   },
   { id: 'servicios',  label: 'Servicios'  },
-  { id: 'soluciones', label: 'Plataforma' },
+  { id: 'soluciones', label: 'Soluciones' },
   { id: 'clientes',   label: 'Clientes'   },
 ];
 
