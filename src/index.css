@@ -445,12 +445,16 @@ section {
   border-radius: 999px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--line-2);
-  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.hero-form:hover:not(:focus-within) {
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 6px 28px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .hero-form:focus-within {
   border-color: var(--accent);
   background: rgba(255,255,255,0.08);
-  box-shadow: 0 0 0 4px var(--accent-soft);
+  box-shadow: 0 0 0 6px var(--accent-soft), 0 8px 36px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 .hero-form input {
   flex: 1;
@@ -915,4 +919,27 @@ section {
 @media (max-width: 880px) {
   .site-nav { display: none; }
   .stats-grid { gap: 36px 20px; }
+}
+
+/* Hero form — apila verticalmente en móvil */
+@media (max-width: 600px) {
+  .hero-form {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+    border-radius: 20px;
+    gap: 8px;
+    max-width: 100%;
+  }
+  .hero-form input {
+    padding: 10px 10px;
+    text-align: center;
+    font-size: 15px;
+  }
+  .hero-form .btn {
+    padding: 13px 20px;
+    justify-content: center;
+    width: 100%;
+    font-size: 14px;
+  }
 }
