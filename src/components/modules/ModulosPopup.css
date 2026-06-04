@@ -38,8 +38,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin-top: 36px;
   width: min(940px, calc(100vw - 32px));
-  height: min(640px, 90vh);
+  height: min(590px, calc(90vh - 72px));
   background: var(--ink-1);
   border: 1px solid var(--fg-line-strong);
   border-radius: 20px;
@@ -399,6 +400,7 @@
     top: 0;
     left: 0;
     transform: none;
+    margin-top: 0;
     animation: mp-mob-up .32s cubic-bezier(0.22, 1, 0.36, 1);
   }
 

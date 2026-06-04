@@ -1,17 +1,18 @@
 import { useEffect } from 'react';
 
-import Seo       from './components/seo/Seo';
-import { ScrollProgress, BackgroundLayer, GlowCards } from './components/effects/Effects';
-import Header    from './components/header/Header';
-import Hero      from './components/intro/Intro';
-import Features  from './components/features/Features';
-import Services  from './components/product/Services';
-import Solutions from './components/modules/Solutions';
-import Stats     from './components/metrics/Stats';
-import About     from './components/about/About';
-import Clients   from './components/clients/Clients';
-import Contact   from './components/contact/Contact';
-import Footer    from './components/footer/Footer';
+import Seo          from './components/seo/Seo';
+import { ScrollProgress, SectionConnector } from './components/effects/Effects';
+import Header        from './components/header/Header';
+import Hero          from './components/intro/Intro';
+import About         from './components/about/About';
+import Services      from './components/product/Services';
+import Solutions     from './components/modules/Solutions';
+import Features      from './components/features/Features';
+import Stats         from './components/metrics/Stats';
+import Clients       from './components/clients/Clients';
+import Contact       from './components/contact/Contact';
+import Footer        from './components/footer/Footer';
+
 
 function App() {
   useEffect(() => {
@@ -30,16 +31,19 @@ function App() {
     <>
       <Seo />
       <ScrollProgress />
-      <BackgroundLayer />
-      <GlowCards />
       <Header />
       <main>
         <Hero />
         <About />
-        <Features />
+        <SectionConnector from="white" to="blue" />
         <Services />
+        <SectionConnector from="blue" to="deep" />
         <Solutions />
+        <SectionConnector from="deep" to="soft" />
+        <Features />
+        <SectionConnector from="soft" to="deep" />
         <Stats />
+        <SectionConnector from="deep" to="soft" />
         <Clients />
         <Contact />
       </main>

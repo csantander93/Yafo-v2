@@ -1,37 +1,33 @@
-import { useEffect, useRef } from 'react';
-import { useReveal, staggerChildren, Counter } from '../../hooks/useReveal';
+import { useReveal, Counter } from '../../hooks/useReveal';
 
 const STATS = [
-  { num: 50,  suf: '+',  label: 'entidades en producción · bancos, fintechs y financieras' },
-  { num: 7,   suf: '',  label: 'países LATAM · AR, PA, CO, CR, HN, MX, NI' },
-  { num: 40,  suf: '+', label: 'módulos · GRC, BCP, PLAFT, NIIF 9, audit y legajo' },
-  { num: 100, suf: '%', label: 'configurable · cada módulo sin desarrollo a medida' },
+  { num: 50,  suf: '+', label: 'Entidades en producción · bancos, fintechs y financieras' },
+  { num: 7,   suf: '',  label: 'Países LATAM · AR, PA, CO, CR, HN, MX, NI' },
+  { num: 40,  suf: '+', label: 'Módulos · GRC, BCP, PLAFT, NIIF 9, audit y legajo' },
+  { num: 100, suf: '%', label: 'Configurable · cada módulo sin desarrollo a medida' },
 ];
 
 export default function Stats() {
-  const sectionRef = useRef(null);
-  const revealRef  = useReveal();
-  const setRef = (el) => { sectionRef.current = el; revealRef.current = el; };
-
-  useEffect(() => { staggerChildren(sectionRef.current, 60, 110); }, []);
-
+  const ref = useReveal();
   return (
-    <section className="stats-section" ref={setRef}>
-      <div className="wrap">
-        <div className="sec-head center reveal">
-          <span className="eyebrow">Por los números</span>
-          <h2 className="display display-lg bold">
-            Adiós al <span className="grad-text">desarrollo a medida</span>.
+    <section id="stats" className="band band-deep stats-band" ref={ref}>
+      <div className="wrap wrap-wide">
+        <div className="stats-head reveal">
+          <span className="eyebrow">
+            <span className="num">06</span> · Por los números
+          </span>
+          <h2 className="display display-lg bold reveal-mask" style={{ marginTop: 24 }}>
+            <span>Adiós al <span className="accent-text">desarrollo a medida</span>.</span>
           </h2>
         </div>
-
-        <div className="stats-grid">
+        <div className="stats-grid reveal">
           {STATS.map((s, i) => (
-            <div className="stat-item reveal" key={i}>
-              <div className="stat-num">
-                <Counter to={s.num} suffix={s.suf} duration={1600 + i * 200} />
+            <div className="stat-cell" key={i}>
+              <span className="ix">{String(i + 1).padStart(2, '0')} / 04</span>
+              <div className="num">
+                <Counter to={s.num} suffix={s.suf} duration={1800 + i * 150} />
               </div>
-              <div className="stat-label">{s.label}</div>
+              <div className="lbl">{s.label}</div>
             </div>
           ))}
         </div>

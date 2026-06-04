@@ -1,154 +1,150 @@
-import { useEffect, useRef, useState } from 'react';
-import { useReveal, staggerChildren, smoothScrollTo } from '../../hooks/useReveal';
-import './Intro.css';
+import { useEffect, useRef } from 'react';
+import { useReveal, Counter, SplitText, smoothScrollTo } from '../../hooks/useReveal';
 
-export default function Hero() {
-  const sectionRef = useRef(null);
-  const titleRef   = useRef(null);
-  const canvasRef  = useRef(null);
-  const [email, setEmail] = useState('');
-  const revealRef  = useReveal();
-
-  const setRef = (el) => { sectionRef.current = el; revealRef.current = el; };
-
-  // Parallax/fade en scroll
+function HeroCanvas() {
+  const ref = useRef(null);
   useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      const el = titleRef.current;
-      if (!el) return;
-      const p = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight * 0.6)));
-      el.style.transform = `scale(${1 - 0.08 * p})`;
-      el.style.opacity   = String(1 - 0.45 * p);
-      raf = 0;
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => { staggerChildren(sectionRef.current, 100, 110); }, []);
-
-  // Red de partículas animada
-  useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let animId;
-
+    let raf;
     const setSize = () => {
-      canvas.width  = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = canvas.offsetWidth * dpr;
+      canvas.height = canvas.offsetHeight * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     setSize();
-
     const ro = new ResizeObserver(setSize);
     ro.observe(canvas);
 
-    const makeParticles = () => {
-      const n = Math.min(90, Math.floor((canvas.width * canvas.height) / 11000));
-      return Array.from({ length: n }, () => ({
-        x:  Math.random() * canvas.width,
-        y:  Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.42,
-        vy: (Math.random() - 0.5) * 0.42,
-      }));
+    const N = 70;
+    let pts = Array.from({ length: N }, () => ({
+      x: Math.random() * canvas.offsetWidth,
+      y: Math.random() * canvas.offsetHeight,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      r: 0.6 + Math.random() * 1.4,
+      depth: Math.random(),
+    }));
+    let mouse = { x: -9999, y: -9999 };
+    const onMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
+    const onLeave = () => { mouse = { x: -9999, y: -9999 }; };
+    const parent = canvas.parentElement;
+    parent.addEventListener('mousemove', onMove);
+    parent.addEventListener('mouseleave', onLeave);
 
-    let pts = makeParticles();
-    const MAX = 165;
+    const blueLine = '10, 92, 174';
+    const aquaLine = '45, 204, 205';
 
     const frame = () => {
-      const W = canvas.width, H = canvas.height;
-      const isPaper = document.documentElement.dataset.theme === 'paper';
-
+      const W = canvas.offsetWidth, H = canvas.offsetHeight;
       ctx.clearRect(0, 0, W, H);
-
-      pts.forEach(p => {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
-      });
-
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x;
           const dy = pts[i].y - pts[j].y;
-          const d  = Math.hypot(dx, dy);
-          if (d < MAX) {
-            const a = (1 - d / MAX) * (isPaper ? 0.22 : 0.18);
+          const d = Math.hypot(dx, dy);
+          if (d < 140) {
+            const a = (1 - d / 140) * 0.20;
+            ctx.strokeStyle = `rgba(${blueLine}, ${a})`;
+            ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = isPaper
-              ? `rgba(65,90,160,${a})`
-              : `rgba(140,170,255,${a})`;
-            ctx.lineWidth = 0.85;
             ctx.stroke();
           }
         }
       }
-
-      pts.forEach(p => {
+      pts.forEach((p) => {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const md = Math.hypot(dx, dy);
+        if (md < 110 && md > 0) {
+          const f = (110 - md) / 110;
+          p.x += (dx / md) * f * 2.2;
+          p.y += (dy / md) * f * 2.2;
+        }
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        const isAqua = p.depth > 0.75;
+        ctx.fillStyle = isAqua
+          ? `rgba(${aquaLine}, 0.85)`
+          : `rgba(${blueLine}, ${0.30 + p.depth * 0.35})`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = isPaper
-          ? 'rgba(65,90,160,0.28)'
-          : 'rgba(140,170,255,0.32)';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
-
-      animId = requestAnimationFrame(frame);
+      raf = requestAnimationFrame(frame);
     };
-
     frame();
 
-    return () => { cancelAnimationFrame(animId); ro.disconnect(); };
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      parent.removeEventListener('mousemove', onMove);
+      parent.removeEventListener('mouseleave', onLeave);
+    };
   }, []);
+  return <canvas ref={ref} className="hero-canvas" aria-hidden="true" />;
+}
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    smoothScrollTo('#contacto');
-    setTimeout(() => {
-      const el = document.querySelector('#contacto input[type="email"]');
-      if (el) { el.focus(); el.value = email; }
-    }, 800);
-  };
-
+export default function Hero() {
+  const ref = useReveal();
   return (
-    <section id="inicio" className="hero-section" ref={setRef}>
-      <div className="hero-bg" aria-hidden="true" />
-      <canvas ref={canvasRef} className="hero-canvas" aria-hidden="true" />
-      <div className="wrap">
-        <div className="hero-content">
-
-          <h1 className="hero-title reveal" ref={titleRef}>
-            Protección Avanzada<br />
-            para tus Activos{' '}
-            <span className="grad-text">Digitales</span>.
+    <section id="inicio" className="hero band band-white" ref={ref}>
+      <HeroCanvas />
+      <div className="hero-top">
+        <div className="wrap wrap-wide hero-inner">
+          <h1 className="hero-title">
+            <span className="ln reveal-mask">
+              <SplitText mode="word">Protección</SplitText>
+            </span>
+            <span className="ln reveal-mask">
+              <span>
+                <SplitText mode="word" className="light">Avanzada </SplitText>
+                <SplitText mode="word">para tus</SplitText>
+              </span>
+            </span>
+            <span className="ln reveal-mask">
+              <span>Activos <SplitText mode="word" className="grad">Digitales.</SplitText></span>
+            </span>
           </h1>
-
-          <p className="hero-sub reveal">
-            Soluciones proactivas de identidad y prevención de ciberamenazas
+        </div>
+      </div>
+      <div className="wrap wrap-wide">
+        <div className="hero-bottom reveal">
+          <p className="sub">
+            Soluciones <strong>proactivas</strong> de identidad y prevención de ciberamenazas
           </p>
-
-          <form className="hero-form reveal" onSubmit={onSubmit}>
-            <input
-              type="email"
-              placeholder="tu@entidad.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-label="Email corporativo"
-            />
-            <button type="submit" className="btn btn-primary">
-              Conoce Nuestros Servicios
-              <svg className="arr" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-                <path d="M2 7h10m-4-4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </form>
-
+          <div className="num-stack">
+            <div className="pair">
+              <strong><Counter to={50} suffix="+" /></strong>
+              <span>entidades</span>
+            </div>
+            <div className="pair">
+              <strong><Counter to={7} /></strong>
+              <span>países LATAM</span>
+            </div>
+            <div className="pair">
+              <strong><Counter to={40} suffix="+" /></strong>
+              <span>módulos</span>
+            </div>
+          </div>
+          <a
+            href="#servicios"
+            className="btn btn-primary"
+            onClick={(e) => { e.preventDefault(); smoothScrollTo('#servicios'); }}
+          >
+            Conoce Nuestros Servicios
+            <svg className="arr" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M2 7h10m-4-4 4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>

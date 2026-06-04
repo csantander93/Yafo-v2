@@ -78,7 +78,8 @@ const clients = [
   { src: bcosantafe,     name: 'Banco Santa Fe',               country: 'Argentina' },
   { src: brubank,        name: 'Brubank',                      country: 'Argentina' },
   { src: uilo,           name: 'Uilo',                         country: 'Argentina' },
-  { src: uala,           name: 'Ualá',                         country: 'México'    },
+  { src: uala,           name: 'Ualá',                         country: 'Colombia'  },
+  { src: uala,           name: 'Ualá',                         country: 'Argentina' },
   { src: bcodelsol,      name: 'Banco del Sol',                country: 'Argentina' },
   { src: naranjax,       name: 'Naranja X',                    country: 'Argentina' },
   { src: tarjetanaranja, name: 'Tarjeta Naranja',              country: 'Argentina' },
@@ -103,17 +104,17 @@ const clients = [
   { src: bcomeridian,    name: 'Banco Meridian',               country: 'Argentina' },
   { src: bcocolumbia,    name: 'Banco Columbia',               country: 'Argentina' },
   { src: bconacion,      name: 'Banco Nación',                 country: 'Argentina' },
-  { src: montemar,       name: 'Montemar',                     country: 'Nicaragua' },
+  { src: montemar,       name: 'Montemar',                     country: 'Argentina' },
   { src: bcoicbc,        name: 'ICBC',                         country: 'Argentina' },
   { src: gire,           name: 'Gire',                         country: 'Argentina' },
-  { src: bcosucredito,   name: 'Sucrédito',                    country: 'Colombia'  },
+  { src: bcosucredito,   name: 'Sucrédito',                    country: 'Argentina' },
   { src: bcojulio,       name: 'Banco Julio',                  country: 'Argentina' },
-  { src: creditoregional,name: 'Crédito Regional',             country: 'Costa Rica'},
+  { src: creditoregional,name: 'Crédito Regional',             country: 'Argentina' },
   { src: balanz,         name: 'Balanz',                       country: 'Argentina' },
   { src: bcomacro,       name: 'Banco Macro',                  country: 'Argentina' },
-  { src: interbank,      name: 'Interbank',                    country: 'Panamá'    },
+  { src: interbank,      name: 'Interbank',                    country: 'Argentina' },
   { src: sancorseguros,  name: 'Sancor Seguros',               country: 'Argentina' },
-  { src: bcocomercio,    name: 'Banco Comercio',               country: 'Nicaragua' },
+  { src: bcocomercio,    name: 'Banco Comercio',               country: 'Argentina' },
   { src: mercedes,       name: 'Mercedes',                     country: 'Argentina' },
   { src: redlink,        name: 'Redlink',                      country: 'Argentina' },
   { src: GPAT,           name: 'GPAT',                         country: 'Argentina' },
@@ -121,23 +122,36 @@ const clients = [
   { src: cajadeahorrospa,name: 'Caja de Ahorro Panamá',        country: 'Panamá'    },
   { src: coopeande,      name: 'Coopeande',                    country: 'Costa Rica'},
   { src: bcoficohsa,     name: 'Ficohsa',                      country: 'Honduras'  },
-  { src: mercantil,      name: 'Mercantil',                    country: 'Colombia'  },
+  { src: bcoficohsa,     name: 'Ficohsa',                      country: 'Nicaragua' },
+  { src: mercantil,      name: 'Mercantil',                    country: 'Panamá'    },
 ];
 
-const COUNTRIES = ['Argentina', 'Colombia', 'Costa Rica', 'Honduras', 'México', 'Nicaragua', 'Panamá'];
+const COUNTRIES = ['Argentina', 'Colombia', 'Costa Rica', 'Honduras', 'Nicaragua', 'Panamá'];
 
-// 5 filas de ~12 items (112px/item × 12 = 1344px < viewport ≈ 1600px).
-// Al caber todos en el ancho visible, ningún logo desaparece:
-// cuando uno sale a medias por un lado, su copia ya está entrando por el otro.
-const row1 = clients.slice(0,  12);
-const row2 = clients.slice(12, 24);
-const row3 = clients.slice(24, 36);
-const row4 = clients.slice(36, 47);
-const row5 = clients.slice(47);
+// Map src → Set<country> para logos que aparecen en varios países
+const srcCountries = new Map();
+clients.forEach(c => {
+  if (!srcCountries.has(c.src)) srcCountries.set(c.src, new Set());
+  srcCountries.get(c.src).add(c.country);
+});
+
+// Lista deduplicada para las filas visuales
+const _seen = new Set();
+const uniqueClients = clients.filter(c => {
+  if (_seen.has(c.src)) return false;
+  _seen.add(c.src);
+  return true;
+});
+
+const row1 = uniqueClients.slice(0,  12);
+const row2 = uniqueClients.slice(12, 24);
+const row3 = uniqueClients.slice(24, 36);
+const row4 = uniqueClients.slice(36, 47);
+const row5 = uniqueClients.slice(47);
 
 // ── Logo item ─────────────────────────────────────────────────────────────────
 const LogoItem = ({ client, hoveredCountry }) => {
-  const isActive = !hoveredCountry || client.country === hoveredCountry;
+  const isActive = !hoveredCountry || (srcCountries.get(client.src)?.has(hoveredCountry) ?? false);
 
   return (
     <div className="flex-shrink-0 mx-4 flex items-center justify-center">
@@ -186,8 +200,8 @@ const Clients = () => {
   const [hoveredCountry, setHoveredCountry] = useState(null);
 
   const stats = [
-    { value: `${clients.length}+`, label: 'Instituciones' },
-    { value: '7',                   label: 'Países' },
+    { value: `${uniqueClients.length}`, label: 'Instituciones' },
+    { value: '6',                        label: 'Países' },
     { value: 'LATAM',               label: 'Cobertura regional' },
   ];
 
