@@ -21,6 +21,7 @@ module.exports = {
         'pulse-slow':           'pulse 3s ease-in-out infinite',
         'livepulse':            'livepulse 1.6s ease-in-out infinite',
         'blink':                'blink 1.1s steps(2, start) infinite',
+        'logo-glow':            'logo-glow 2.4s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
@@ -45,6 +46,10 @@ module.exports = {
         },
         blink: {
           '50%': { opacity: '0' },
+        },
+        'logo-glow': {
+          '0%, 100%': { boxShadow: '0 2px 10px 0 rgba(59,130,246,0.18)' },
+          '50%':      { boxShadow: '0 4px 24px 6px rgba(59,130,246,0.42)' },
         },
       },
     },

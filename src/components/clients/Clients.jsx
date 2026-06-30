@@ -54,7 +54,6 @@ import naranjax      from '../../assets/img-clients/naranjax.webp';
 import reba          from '../../assets/img-clients/reba.webp';
 import sancorseguros from '../../assets/img-clients/sancorseguros.webp';
 import uala          from '../../assets/img-clients/uala.webp';
-import uilo          from '../../assets/img-clients/uilo.webp';
 import bcocomercio   from '../../assets/img-clients/bcocomercio.webp';
 import mercedes      from '../../assets/img-clients/mercedes.webp';
 import tarjetanaranja from '../../assets/img-clients/tarjetanaranja.webp';
@@ -77,7 +76,6 @@ const clients = [
   { src: bcosantacruz,   name: 'Banco Santa Cruz',             country: 'Argentina' },
   { src: bcosantafe,     name: 'Banco Santa Fe',               country: 'Argentina' },
   { src: brubank,        name: 'Brubank',                      country: 'Argentina' },
-  { src: uilo,           name: 'Uilo',                         country: 'Argentina' },
   { src: uala,           name: 'Ualá',                         country: 'Colombia'  },
   { src: uala,           name: 'Ualá',                         country: 'Argentina' },
   { src: bcodelsol,      name: 'Banco del Sol',                country: 'Argentina' },
@@ -135,6 +133,12 @@ clients.forEach(c => {
   srcCountries.get(c.src).add(c.country);
 });
 
+// Cantidad de clientes por país (para decidir nivel de efecto)
+const clientCountByCountry = new Map();
+clients.forEach(c => {
+  clientCountByCountry.set(c.country, (clientCountByCountry.get(c.country) ?? 0) + 1);
+});
+
 // Lista deduplicada para las filas visuales
 const _seen = new Set();
 const uniqueClients = clients.filter(c => {
@@ -151,19 +155,37 @@ const row5 = uniqueClients.slice(47);
 
 // ── Logo item ─────────────────────────────────────────────────────────────────
 const LogoItem = ({ client, hoveredCountry }) => {
-  const isActive = !hoveredCountry || (srcCountries.get(client.src)?.has(hoveredCountry) ?? false);
+  const isActive      = !hoveredCountry || (srcCountries.get(client.src)?.has(hoveredCountry) ?? false);
+  const isHighlighted = !!hoveredCountry && (srcCountries.get(client.src)?.has(hoveredCountry) ?? false);
+  // Países con muchos clientes solo reciben color; con pocos reciben el efecto completo
+  const isLargeCountry = hoveredCountry && (clientCountByCountry.get(hoveredCountry) ?? 0) >= 10;
+  const fullEffect = isHighlighted && !isLargeCountry;
 
   return (
-    <div className="flex-shrink-0 mx-4 flex items-center justify-center">
-      <div className="w-28 h-14 flex items-center justify-center px-2 py-1.5 rounded-xl bg-white border border-slate-100 hover:border-blue-100 hover:shadow-md hover:shadow-blue-50 transition-all duration-200 group">
+    <div
+      className={[
+        'flex-shrink-0 mx-4 flex items-center justify-center relative transition-transform duration-300 ease-out',
+        fullEffect ? 'scale-110 z-10' : 'scale-100',
+      ].join(' ')}
+    >
+      <div
+        className={[
+          'w-28 h-14 flex items-center justify-center px-2 py-1.5 rounded-xl bg-white border transition-all duration-300 group',
+          fullEffect
+            ? 'border-blue-300 animate-logo-glow'
+            : isHighlighted
+              ? 'border-blue-200'
+              : 'border-slate-100 hover:border-blue-100 hover:shadow-md hover:shadow-blue-50',
+        ].join(' ')}
+      >
         <img
           src={client.src}
           alt={`Logo ${client.name}`}
           className={[
-            'max-h-8 max-w-full w-auto object-contain transition-all duration-200',
+            'max-h-8 max-w-full w-auto object-contain transition-all duration-300',
             isActive
               ? 'opacity-100 grayscale-0'
-              : 'opacity-60 grayscale group-hover:opacity-100 group-hover:grayscale-0',
+              : 'opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0',
           ].join(' ')}
           loading="lazy"
           onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
